@@ -1,0 +1,58 @@
+<!DOCTYPE html><html>
+<head>
+<title>Student Dashboard</title><style>
+
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+padding:40px;
+}
+
+.card{
+background:#1e293b;
+padding:25px;
+border-radius:10px;
+max-width:500px;
+margin:auto;
+}
+
+button{
+padding:10px 20px;
+background:#22c55e;
+border:none;
+border-radius:6px;
+color:white;
+cursor:pointer;
+margin-top:15px;
+}
+
+</head>
+
+<body>
+
+<h1>Student Dashboard</h1>
+
+<div class="card">
+
+<p><b>Welcome Student</b></p>
+
+<p>Plan: Free</p>
+
+<p>Questions Remaining Today: <span id="limit">5</span></p>
+
+<button onclick="goAI()">Ask AI</button>
+
+</div>
+
+<script>
+
+function goAI(){
+window.location.href="/";
+}
+
+</script>
+
+</body>
+</html>
