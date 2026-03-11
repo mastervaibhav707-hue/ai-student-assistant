@@ -46,7 +46,7 @@ border-radius:8px;
 </head>
 
 <body>
-<div style="position:absolute; top:20px; right:30px;">
+<div style="position:fixed; top:20px; right:30px; z-index:1000;">
 
 <a href="/login.html" style="
 padding:8px 16px;
@@ -66,3 +66,44 @@ border-radius:5px;
 ">Signup</a>
 
 </div>
+<div class="container">
+
+<h1>AI Student Assistant</h1>
+<p>Ask any academic question</p>
+
+<textarea id="question" placeholder="Type your question..."></textarea>
+
+<br>
+
+<button onclick="askAI()">Ask AI</button>
+
+<div id="response"></div>
+
+</div>
+
+<script>
+
+async function askAI(){
+
+let question = document.getElementById("question").value;
+
+document.getElementById("response").innerHTML="Thinking...";
+
+let res = await fetch("/api/ask",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({ question: question })
+});
+
+let data = await res.json();
+
+document.getElementById("response").innerHTML=data.answer;
+
+}
+
+</script>
+
+</body>
+</html>
