@@ -37,10 +37,69 @@ border-radius:5px;
 
 <h1>Login</h1>
 
-<input type="email" placeholder="Email"><br>
-<input type="password" placeholder="Password"><br>
+<input id="email" type="email" placeholder="Email"><br>
+<input id="password" type="password" placeholder="Password"><br>
 
-<button>Login</button>
+<button onclick="loginEmail()">Login</button>
+
+<br><br>
+
+<button onclick="loginGoogle()">Login with Google</button>
+
+<br><br>
+
+<input id="phone" type="text" placeholder="Mobile number"><br>
+<div id="recaptcha-container"></div>
+<button onclick="loginPhone()">Login with Mobile OTP</button>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+const firebaseConfig = {
+apiKey: "AIzaSyCNPecmE0xvJfI_PvG_tUopapr7beAB6DY",
+authDomain: "ai-student-assistant-fe776.firebaseapp.com",
+projectId: "ai-student-assistant-fe776",
+storageBucket: "ai-student-assistant-fe776.appspot.com",
+appId: "1:660130862451:web:1b8dfe1e293ee06a542106"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.loginEmail = async function(){
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+
+await signInWithEmailAndPassword(auth,email,password);
+alert("Login successful");
+}
+
+window.loginGoogle = async function(){
+const provider = new GoogleAuthProvider();
+await signInWithPopup(auth,provider);
+alert("Google login successful");
+}
+
+window.loginPhone = async function(){
+
+window.recaptchaVerifier = new RecaptchaVerifier(auth,"recaptcha-container",{size:"normal"});
+
+const phoneNumber = document.getElementById("phone").value;
+
+const confirmation = await signInWithPhoneNumber(auth,phoneNumber,window.recaptchaVerifier);
+
+const code = prompt("Enter OTP");
+
+await confirmation.confirm(code);
+
+alert("Phone login successful");
+
+}
+}
+
+</script>
+
 
 </body>
 </html>
