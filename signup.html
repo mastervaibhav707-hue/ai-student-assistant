@@ -4,7 +4,6 @@
 <title>Signup - AI Student Assistant</title>
 
 <style>
-
 body{
 background:#0f172a;
 color:white;
@@ -27,8 +26,8 @@ background:#3b82f6;
 color:white;
 border:none;
 border-radius:5px;
+cursor:pointer;
 }
-
 </style>
 
 </head>
@@ -37,28 +36,41 @@ border-radius:5px;
 
 <h1>Create Account</h1>
 
-<input type="email" placeholder="Email"><br>
-<input type="password" placeholder="Password"><br>
-<input type="password" placeholder="Confirm Password"><br>
+<input type="email" id="email" placeholder="Email"><br>
+<input type="password" id="password" placeholder="Password"><br>
+<input type="password" id="confirm" placeholder="Confirm Password"><br>
 
-<button>Signup</button>
+<button onclick="signupEmail()">Signup</button>
+
 <br><br>
 
 <button onclick="loginGoogle()">Continue with Google</button>
 
 <br><br>
 
-<input id="phone" type="text" placeholder="Mobile number"><br>
+<input id="phone" type="text" placeholder="Mobile number with country code"><br>
 
 <div id="recaptcha-container"></div>
+
 <button onclick="loginPhone()">Continue with Mobile OTP</button>
+
+
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import {
+getAuth,
+createUserWithEmailAndPassword,
+GoogleAuthProvider,
+signInWithPopup,
+RecaptchaVerifier,
+signInWithPhoneNumber
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
 
 const firebaseConfig = {
-apiKey: "AIzaSyCNPEcmeEOxvJfI_PvG_tUopapr7beaB6DY",
+apiKey: "AIzaSyCNPecmEOxvJfI_PvG_tUopapr7beaB6DY",
 authDomain: "ai-student-assistant-fe776.firebaseapp.com",
 projectId: "ai-student-assistant-fe776",
 storageBucket: "ai-student-assistant-fe776.appspot.com",
@@ -68,21 +80,47 @@ appId: "1:660130862451:web:1b8dfe1e293ee06a542106"
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-window.loginGoogle = async function(){
-const provider = new GoogleAuthProvider();
-await signInWithPopup(auth, provider);
-alert("Google signup successful");
+
+window.signupEmail = async function(){
+
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+
+await createUserWithEmailAndPassword(auth,email,password);
+
+alert("Signup successful");
+
 }
+
+
+
+window.loginGoogle = async function(){
+
+const provider = new GoogleAuthProvider();
+  await signInWithPopup(auth,provider);
+
+alert("Google signup successful");
+
+}
+
+
 
 window.loginPhone = async function(){
-window.recaptchaVerifier = new RecaptchaVerifier(auth,"recaptcha-container",{size:"normal"});
+
+window.recaptchaVerifier = new RecaptchaVerifier("recaptcha-container",{size:"normal"},auth);
 const phoneNumber = document.getElementById("phone").value;
+
 const confirmation = await signInWithPhoneNumber(auth,phoneNumber,window.recaptchaVerifier);
+
 const code = prompt("Enter OTP");
+
 await confirmation.confirm(code);
+
 alert("Phone signup successful");
+
 }
 
-</script>  
+</script>
+
 </body>
 </html>
